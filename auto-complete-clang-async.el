@@ -271,7 +271,15 @@ set new cflags for ac-clang from shell command output"
            (setq candidates (nreverse candidates))
            (setq ac-clang-template-candidates candidates)
            (setq ac-clang-template-start-point (point))
-           (ac-complete-clang-template)
+
+           (if (cdr candidates)
+               (ac-complete-clang-template)
+             ;; If there is only one candidate, auto-complete will expand it in
+             ;; ac-expand-common, and then will not perform the completion
+             ;; action, so our template will not be expanded. Work around this
+             ;; by faking completion, and going straight to the template action.
+             (progn (setq ac-last-completion (cons (point-marker) (car candidates)))
+                    (ac-clang-template-action)))
 
            (unless (cdr candidates) ;; unless length > 1
              (message (replace-regexp-in-string "\n" "   ;    " help))))
