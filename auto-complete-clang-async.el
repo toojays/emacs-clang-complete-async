@@ -34,7 +34,7 @@
 
 
 (provide 'auto-complete-clang-async)
-(eval-when-compile (require 'cl))
+(eval-when-compile (require' cl))
 (require 'auto-complete)
 (require 'flymake)
 
@@ -429,7 +429,7 @@ set new cflags for ac-clang from shell command output"
     (process-send-string proc "\n\n")))
 
 (defun ac-clang-send-reparse-request (proc)
-  (if (eq (process-status "clang-complete") 'run)
+  (if (eq (process-status proc) 'run)
       (save-restriction
     (widen)
     (process-send-string proc "SOURCEFILE\n")
@@ -469,7 +469,7 @@ set new cflags for ac-clang from shell command output"
          (message "`ac-clang-cflags' should be a list of strings")))
 
 (defun ac-clang-send-shutdown-command (proc)
-  (if (eq (process-status "clang-complete") 'run)
+  (if (eq (process-status proc) 'run)
     (process-send-string proc "SHUTDOWN\n"))
   )
 
@@ -624,6 +624,7 @@ set new cflags for ac-clang from shell command output"
   (ac-clang-send-reparse-request ac-clang-completion-process)
 
   (add-hook 'kill-buffer-hook 'ac-clang-shutdown-process nil t)
+  (add-hook 'before-revert-hook 'ac-clang-shutdown-process nil t)
   (add-hook 'before-save-hook 'ac-clang-reparse-buffer)
 
   (local-set-key (kbd ".") 'ac-clang-async-autocomplete-autotrigger)
