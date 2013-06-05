@@ -49,9 +49,7 @@ $(OBJECT_PATH)/%.o: %.c
 
 $(DEPENDENCY_PATH)/%.d: %.c
 	@mkdir -p $(DEPENDENCY_PATH)
-	@$(CC) -M $(CFLAGS) $< > $@.$$$$;			\
-	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@;	\
-	rm -f $@.$$$$
+	@$(CC) -M $(CFLAGS) -MT $(OBJECT_PATH)/$(*F).o -MT $@ -MF $@ $<
 
 
 .PHONY: clean build install uninstall
