@@ -267,13 +267,13 @@ set new cflags for ac-clang from shell command output"
              (when (string-match ", \\.\\.\\." args)
                (setq args (replace-regexp-in-string ", \\.\\.\\." "" args))
                (push (propertize args 'ac-clang-help ret-f 'raw-args "") candidates)))
-            (t
+            ((string= "" s)
              ;; Most likely this is a type with no arguments. We still need to
              ;; add something to the candidate list. Otherwise, there is no way
              ;; for the user to complete just a C++ class name, because
              ;; completion will try to expand to a call to the class's
              ;; constructor.
-             (push s candidates))))
+             (push "" candidates))))
 
     (cond (candidates
            (setq candidates (delete-dups candidates))
