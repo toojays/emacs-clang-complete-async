@@ -247,7 +247,8 @@ set new cflags for ac-clang from shell command output"
                    args (match-string 2 s))
              (push (propertize (ac-clang-clean-document args) 'ac-clang-help ret-t
                                'raw-args args) candidates))
-            ((string-match "^\\([^(<]*\\)\\([<(].*[>)]\\)" s)
+            ((or (string-match "^\\([^(]*\\)\\((.*)\\)" s)
+                 (string-match "^\\([^<]*\\)\\(<<.*>\\)" s))
              (setq fn (match-string 1 s)
                    args (match-string 2 s))
              (push (propertize (ac-clang-clean-document args) 'ac-clang-help ret-t
